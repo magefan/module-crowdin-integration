@@ -11,9 +11,9 @@ This extension allows you to integrate Magento 2 Shop with Crowdin to easily man
   * Magento Community 2.2.0-2.4.x (CE, EE, ECE, B2B)
 
 ## Online Documentation
-https://store.crowdin.com/magento?utm_source=github.com&utm_medium=referral&utm_campaign=magefan
+[Crowdin Documentation](https://store.crowdin.com/magento?utm_source=github.com&utm_medium=referral&utm_campaign=magefan)
 
-https://magefan.com/magento-2-crowdin-integration/documentation
+[Magefan Documentation](https://magefan.com/magento-2-crowdin-integration/documentation)
 
 ## Installation Instruction
 https://magefan.com/magento-2-crowdin-integration/installation
