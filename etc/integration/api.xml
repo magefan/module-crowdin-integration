@@ -1,0 +1,9 @@
+<integrations>
+    <integration name="crowdin">
+        <resources>
+<!--            Keep resource the same as in InstallData.php!!!-->
+            <resource name="Magefan_Crowdin::config_integration" />
+            <resource name="Magento_Cms::save_design" />
+        </resources>
+    </integration>
+</integrations>

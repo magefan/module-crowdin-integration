@@ -1,0 +1,48 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="magefan" sortOrder="110" translate="label" class="magefan-tab">
+            <label>Magefan Extensions</label>
+        </tab>
+        <section id="mf_crowdin_sync_settings" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label">
+            <label>Crowdin Integration</label>
+            <tab>magefan</tab>
+            <resource>Magefan_Crowdin::config_integration</resource>
+            <group id="general" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label">
+                <label>General</label>
+                <attribute type="expanded">1</attribute>
+                <field id="version" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <frontend_model>Magefan\Crowdin\Block\Adminhtml\System\Config\Form\Info</frontend_model>
+                </field>
+
+                <field id="enabled" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="20" translate="label" type="select">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <field id="integration_code" translate="label" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label></label>
+                    <frontend_model>Magefan\Crowdin\Block\Adminhtml\Form\IntegrationKey</frontend_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+            </group>
+            <group id="mapped" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Synchronize To Crowdin</label>
+                <attribute type="expanded">1</attribute>
+                <field id="fields" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <frontend_model>Magefan\Crowdin\Block\Adminhtml\Form\Field\Mapped</frontend_model>
+                    <backend_model>Magefan\Crowdin\Model\System\Config\Backend\Mapped</backend_model>
+                    <comment>If some field won't be selected in mapping, it will be enabled by default. If you remove all mappings, all fields will be enable to sync to Crowdin</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

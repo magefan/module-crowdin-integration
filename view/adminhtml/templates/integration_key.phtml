@@ -1,0 +1,76 @@
+<?php
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+
+/**
+ * @var $block \Magefan\Crowdin\Block\Adminhtml\Form\IntegrationKey
+ */
+?>
+
+<?php if ($block->isIntegrationActivated()) { ?>
+<div class="pp-buttons-container">
+    <button type="button" id="copy-integration-key" onclick="copyToClipboard()">
+        <?= $block->escapeHtml(__('Copy Integration Key')); ?>
+    </button>
+</div>
+
+<script>
+    function copyToClipboard() {
+        const elem = document.createElement('textarea');
+        elem.value = document.getElementById("integration-key").value;
+        document.body.appendChild(elem);
+        elem.select();
+        document.execCommand('copy');
+        document.body.removeChild(elem);
+
+        let button = document.getElementById("copy-integration-key");
+        let buttonOriginalText = button.innerHTML;
+        button.classList.add('copied');
+        button.innerHTML = '<?=__("Copied!") ?>';
+
+        setTimeout(function () {
+            button.innerHTML = buttonOriginalText;
+            button.classList.remove('copied')
+        }, 2000);
+    }
+</script>
+
+<style>
+    #copy-integration-key {
+        margin: 0 auto;
+        color: #fff;
+        background-color: #000;
+        border: 1px solid #fff;
+        padding: 10px;
+        width: 300px;
+
+    }
+
+    #copy-integration-key.copied {
+        background-color: #43a047;
+        animation: mymove 4s;
+    }
+
+    @keyframes mymove {
+        from {background-color: #43a047;}
+        to {background-color: black;}
+    }
+
+</style>
+
+<?php } else { ?>
+    <div class="active-integration">
+        <span>
+            <?= __('Please <a href="%1" target="_blank">Activate Integration</a> named "crowdin" to synchronize Magento and Crowdin.', $block->getUrl('adminhtml/integration'))?>
+        </span>
+    </div>
+
+    <style>
+        .active-integration {
+            background: #fffbbb;
+            padding: 15px;
+        }
+    </style>
+<?php } ?>

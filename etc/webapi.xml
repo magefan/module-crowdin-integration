@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+-->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route url="/V1/crowdin/entities/list/:storeId" method="GET">
+        <service class="Magefan\Crowdin\Api\TranslationRepositoryInterface" method="getEntitiesList"/>
+        <resources>
+            <resource ref="Magefan_Crowdin::config_integration"/>
+        </resources>
+    </route>
+
+    <route url="/V1/crowdin/stores/list" method="GET">
+        <service class="Magefan\Crowdin\Api\TranslationRepositoryInterface" method="getStoresList"/>
+        <resources>
+            <resource ref="Magefan_Crowdin::config_integration"/>
+        </resources>
+    </route>
+    
+    <route url="/V1/crowdin/entity/get/:id" method="GET">
+        <service class="Magefan\Crowdin\Api\TranslationRepositoryInterface" method="getEntity"/>
+        <resources>
+            <resource ref="Magefan_Crowdin::config_integration"/>
+        </resources>
+    </route>
+
+    <route url="/V1/crowdin/entity/update" method="POST">
+        <service class="Magefan\Crowdin\Api\TranslationRepositoryInterface" method="updateEntity"/>
+        <resources>
+            <resource ref="Magefan_Crowdin::config_integration"/>
+        </resources>
+    </route>
+</routes>
