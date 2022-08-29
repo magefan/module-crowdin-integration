@@ -25,7 +25,7 @@ class Info extends \Magento\Config\Block\System\Config\Form\Field
     public function __construct(
         \Magento\Framework\Module\ModuleListInterface $moduleList,
         \Magento\Backend\Block\Template\Context $context,
-        array $data = [],
+        array $data = []
     ) {
         parent::__construct($context, $data);
         $this->moduleList = $moduleList;
