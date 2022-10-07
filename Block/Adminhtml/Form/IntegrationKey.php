@@ -23,12 +23,7 @@ class IntegrationKey  extends \Magento\Config\Block\System\Config\Form\Field
     protected $integrationService;
 
     /**
-     * @var SecureHtmlRenderer
-     */
-    private $secureRenderer;
-
-    /**
-     * @var null 
+     * @var null
      */
     private $integration = null;
 
@@ -36,16 +31,13 @@ class IntegrationKey  extends \Magento\Config\Block\System\Config\Form\Field
      * @param Context $context
      * @param IntegrationServiceInterface $integrationService
      * @param array $data
-     * @param SecureHtmlRenderer|null $secureRenderer
      */
     public function __construct(
         Context $context,
         IntegrationServiceInterface $integrationService,
-        ?SecureHtmlRenderer $secureRenderer = null,
         array $data = []
     ) {
         parent::__construct($context, $data);
-        $this->secureRenderer = $secureRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
         $this->integrationService = $integrationService;
     }
 
