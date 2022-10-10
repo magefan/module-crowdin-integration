@@ -9,7 +9,6 @@ namespace Magefan\Crowdin\Block\Adminhtml\Form;
 
 use Magento\Backend\Block\Template\Context;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Magento\Integration\Api\IntegrationServiceInterface;
 use Magefan\Crowdin\Model\Config;
 
