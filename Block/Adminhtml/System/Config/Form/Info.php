@@ -47,7 +47,16 @@ class Info extends \Magento\Config\Block\System\Config\Form\Field
         } else {
             $html .= '<strong>Magefan</strong>';
         }
-        $html .= '.</div>';
+
+        $html .= '<br/><br/>';
+        if ($useUrl) {
+            $html .= '<a href="https://crowdin.com?utm_source=http://magefan.com&utm_medium=referral&utm_campaign=magefan" target="_blank">Crowdin</a>';
+        } else {
+            $html .= '<strong>Crowdin</strong>';
+        }
+
+        $html .= ' is a cloud-based localization management software with 2M+ user accounts and 130K+ localization projects that helps teams and companies reach new markets. People from over 160 countries use Crowdin to translate & localize their software, mobile and desktop apps, games, websites, help articles, marketing communication, and other content.';
+        $html .= '</div>';
 
         return $html;
     }
