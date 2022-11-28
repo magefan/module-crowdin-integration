@@ -77,7 +77,7 @@ class CategoryList implements OptionSourceInterface
         $categoryArray = [];
         foreach ($categoryList as $key => $value) {
             if ($path = $this->getCategoryPath($value['path'], $categoryList)) {
-                $categoryArray[$key] = '[' . $value['cat_id'] . '] -- ' . $path;
+                $categoryArray[$key] = $path . ' (ID: ' . $value['cat_id'] . ')';
             }
         }
 
