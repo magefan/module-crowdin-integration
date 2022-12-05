@@ -27,6 +27,10 @@ class Config
 
     const XML_PATH_FIELDS_MAPPING = 'mf_crowdin_sync_settings/mapped/fields';
 
+    const XML_PATH_CATALOG_SYNCHRONIZATION = 'mf_crowdin_sync_settings/catalog_synchronization/synchronize_categories_and_products';
+
+    const XML_PATH_CATALOG_SPECIFIC_SYNCHRONIZATION = 'mf_crowdin_sync_settings/catalog_synchronization/specific_categories_and_products';
+
     /**
      * Config constructor.
      * @param ScopeConfigInterface $scopeConfig
@@ -74,5 +78,23 @@ class Config
             ScopeInterface::SCOPE_STORE,
             $storeId
         );
+    }
+
+    /**
+     * @param null $storeId
+     * @return int
+     */
+    public function getCatalogSynchronizationOption($storeId = null): int
+    {
+        return (int)$this->getConfig(self::XML_PATH_CATALOG_SYNCHRONIZATION, $storeId);
+    }
+
+    /**
+     * @param null $storeId
+     * @return array
+     */
+    public function getCatalogSynchronizationValues($storeId = null)
+    {
+        return explode(',', $this->getConfig(self::XML_PATH_CATALOG_SPECIFIC_SYNCHRONIZATION, $storeId));
     }
 }

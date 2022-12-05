@@ -43,6 +43,21 @@
                     <comment>If some field won't be selected in mapping, it will be enabled by default. If you remove all mappings, all fields will be enable to sync to Crowdin</comment>
                 </field>
             </group>
+            <group id="catalog_synchronization" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1">
+                <label>Catalog Synchronization</label>
+                <field id="synchronize_categories_and_products" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Synchronize Categories And Products</label>
+                    <source_model>Magefan\Crowdin\Model\Config\Source\SynchronizationType</source_model>
+                </field>
+                <field id="specific_categories_and_products" translate="label comment" type="multiselect" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label><![CDATA[Specific Сategories and Products]]></label>
+                    <source_model>Magefan\Crowdin\Model\Config\Source\CategoryList</source_model>
+                    <frontend_model>Magefan\Crowdin\Block\Adminhtml\Form\Multiselect</frontend_model>
+                    <depends>
+                        <field id="mf_crowdin_sync_settings/catalog_synchronization/synchronize_categories_and_products" separator=",">1,2</field>
+                    </depends>
+                </field>
+            </group>
         </section>
     </system>
 </config>

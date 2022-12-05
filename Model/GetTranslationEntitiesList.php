@@ -91,6 +91,11 @@ class GetTranslationEntitiesList
     protected $blockRepository;
 
     /**
+     * @var Config
+     */
+    private  $config;
+
+    /**
      * @var \string[][]
      */
     private $entitiesList = [
@@ -128,6 +133,7 @@ class GetTranslationEntitiesList
      * @param FilterGroupBuilder $filterGroupBuilder
      * @param PageRepositoryInterface $pageRepository
      * @param BlockRepositoryInterface $blockRepository
+     * @param Config $config
      */
     public function __construct(
         CategoryCollectionFactory $categoryCollectionFactory,
@@ -140,7 +146,8 @@ class GetTranslationEntitiesList
         ProductAttributeRepositoryInterface $productAttributeRepository,
         FilterGroupBuilder $filterGroupBuilder,
         PageRepositoryInterface $pageRepository,
-        BlockRepositoryInterface $blockRepository
+        BlockRepositoryInterface $blockRepository,
+        Config $config
     ) {
         $this->categoryCollectionFactory = $categoryCollectionFactory;
         $this->productRepository = $productRepository;
@@ -153,6 +160,7 @@ class GetTranslationEntitiesList
         $this->filterGroupBuilder = $filterGroupBuilder;
         $this->pageRepository = $pageRepository;
         $this->blockRepository = $blockRepository;
+        $this->config = $config;
     }
 
     /**
@@ -174,7 +182,14 @@ class GetTranslationEntitiesList
 
     private function addCategoriesEntities()
     {
+
         $categoryCollection = $this->categoryCollectionFactory->create()->addAttributeToSelect('name');
+
+        if ($option = $this->config->getCatalogSynchronizationOption()){
+
+            $categoriesIds = $this->config->getCatalogSynchronizationValues();
+            $categoryCollection->addAttributeToFilter('entity_id', array($option != 1 ? 'nin' : 'in' => $categoriesIds));
+        }
 
         foreach ($categoryCollection as $item) {
             $isRootCategory = ((int)$item->getLevel() === 0);
@@ -197,13 +212,24 @@ class GetTranslationEntitiesList
 
     private function addProductsEntities()
     {
-        $searchCriteria = $this->searchCriteriaBuilder->addFilters([
-            $this->filterBuilder
-                ->setField('store_id')
-                ->setConditionType('eq')
-                ->setValue(0)
-                ->create()
-        ])->create();
+        $filters = [];
+        $filters[] = $this->filterBuilder
+            ->setField('store_id')
+            ->setConditionType('eq')
+            ->setValue(0)
+            ->create();
+
+        if ($option = $this->config->getCatalogSynchronizationOption()){
+
+            $categoriesIds = $this->config->getCatalogSynchronizationValues();
+            $categoryFilter = $this->filterBuilder->setField('category_id')
+                ->setValue($categoriesIds)
+                ->setConditionType($option != 1 ? 'nin' : 'in')
+                ->create();
+            $filters[] = $categoryFilter;
+        }
+
+        $searchCriteria = $this->searchCriteriaBuilder->addFilters($filters)->create();
 
         $this->addEntityToResponse(self::PRODUCTS, $this->productRepository->getList($searchCriteria)->getItems());
     }
