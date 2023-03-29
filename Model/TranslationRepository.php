@@ -25,22 +25,22 @@ class TranslationRepository implements TranslationRepositoryInterface
     /**
      * @var \Magefan\Crowdin\Model\GetTranslationEntity
      */
-    private \Magefan\Crowdin\Model\GetTranslationEntity $getTranslationEntity;
+    private $getTranslationEntity;
 
     /**
      * @var \Magefan\Crowdin\Model\UpdateTranslationEntity
      */
-    private \Magefan\Crowdin\Model\UpdateTranslationEntity $updateTranslationEntity;
+    private $updateTranslationEntity;
 
     /**
      * @var StoreManagerInterface
      */
-    private StoreManagerInterface $_storeManager;
+    private $_storeManager;
 
     /**
      * @var \Magefan\Crowdin\Model\Config
      */
-    private \Magefan\Crowdin\Model\Config $config;
+    private $config;
 
     /**
      * @param \Magefan\Crowdin\Model\GetTranslationEntitiesList $getTranslationEntitiesList

@@ -46,82 +46,82 @@ class UpdateTranslationEntity
     /**
      * @var CategoryRepositoryInterface
      */
-    private CategoryRepositoryInterface $categoryRepository;
+    private $categoryRepository;
 
     /**
      * @var ProductRepositoryInterface
      */
-    private ProductRepositoryInterface $productRepository;
+    private $productRepository;
 
     /**
      * @var Emulation
      */
-    private Emulation $emulation;
+    private $emulation;
 
     /**
      * @var EmailTemplateResourceModel
      */
-    private EmailTemplateResourceModel $emailTemplateResourceModel;
+    private $emailTemplateResourceModel;
 
     /**
      * @var EmailTemplate
      */
-    private EmailTemplate $emailTemplate;
+    private $emailTemplate;
 
     /**
      * @var PageRepositoryInterface
      */
-    private PageRepositoryInterface $pageRepository;
+    private $pageRepository;
 
     /**
      * @var BlockRepositoryInterface
      */
-    private BlockRepositoryInterface $blockRepository;
+    private $blockRepository;
 
     /**
      * @var StoreManagerInterface
      */
-    private StoreManagerInterface $storeManager;
+    private $storeManager;
 
     /**
      * @var ResourceConnection
      */
-    private ResourceConnection $resource;
+    private $resource;
 
     /**
      * @var GetPageByIdentifierInterface
      */
-    private GetPageByIdentifierInterface $getPageByIdentifier;
+    private $getPageByIdentifier;
 
     /**
      * @var GetBlockByIdentifierInterface
      */
-    private GetBlockByIdentifierInterface $getBlockByIdentifier;
+    private $getBlockByIdentifier;
 
     /**
      * @var PageFactory
      */
-    private PageFactory $pageFactory;
+    private $pageFactory;
 
     /**
      * @var BlockFactory
      */
-    private BlockFactory $blockFactory;
+    private $blockFactory;
 
     /**
      * @var SearchCriteriaBuilder
      */
-    private SearchCriteriaBuilder $searchCriteriaBuilder;
+    private $searchCriteriaBuilder;
 
     /**
      * @var FilterBuilder
      */
-    private FilterBuilder $filterBuilder;
+    private $filterBuilder;
 
     /**
      * @var FilterGroupBuilder
      */
-    private FilterGroupBuilder $filterGroupBuilder;
+    private $filterGroupBuilder;
 
     /**
      * @param CategoryRepositoryInterface $categoryRepository
