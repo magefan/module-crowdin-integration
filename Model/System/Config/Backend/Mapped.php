@@ -19,6 +19,11 @@ use Magento\Framework\Data\Collection\AbstractDb;
 class Mapped extends \Magento\Framework\App\Config\Value
 {
     /**
+     * @var ModelMapped
+     */
+    private ModelMapped $translatableIntegrationMapped;
+
+    /**
      * @param Context $context
      * @param Registry $registry
      * @param ScopeConfigInterface $config

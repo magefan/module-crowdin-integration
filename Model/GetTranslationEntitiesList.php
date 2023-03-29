@@ -81,6 +81,21 @@ class GetTranslationEntitiesList
     protected $attributeFactory;
 
     /**
+     * @var CategoryAttributeRepositoryInterface
+     */
+    protected CategoryAttributeRepositoryInterface $categoryAttributeRepository;
+
+    /**
+     * @var ProductAttributeRepositoryInterface
+     */
+    protected ProductAttributeRepositoryInterface $productAttributeRepository;
+
+    /**
+     * @var FilterGroupBuilder
+     */
+    protected FilterGroupBuilder $filterGroupBuilder;
+
+    /**
      * @var PageRepositoryInterface
      */
     protected $pageRepository;

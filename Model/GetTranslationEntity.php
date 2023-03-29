@@ -29,6 +29,91 @@ use Magento\Store\Model\App\Emulation;
 class GetTranslationEntity
 {
     /**
+     * @var CategoryCollectionFactory
+     */
+    private $categoryCollectionFactory;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
+     * @var FilterBuilder
+     */
+    private $filterBuilder;
+
+    /**
+     * @var Attribute
+     */
+    private $attributeFactory;
+
+    /**
+     * @var CategoryAttributeRepositoryInterface
+     */
+    private $categoryAttributeRepository;
+
+    /**
+     * @var ProductAttributeRepositoryInterface
+     */
+    private $productAttributeRepository;
+
+    /**
+     * @var FilterGroupBuilder
+     */
+    private $filterGroupBuilder;
+
+    /**
+     * @var CategoryRepositoryInterface
+     */
+    private $categoryRepository;
+
+    /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var StoreInterface
+     */
+    private $store;
+
+    /**
+     * @var \Magefan\Crowdin\Model\Config
+     */
+    private $config;
+
+    /**
+     * @var EmailTemplate
+     */
+    private $emailTemplate;
+
+    /**
+     * @var PageRepositoryInterface
+     */
+    private $pageRepository;
+
+    /**
+     * @var BlockRepositoryInterface
+     */
+    private $blockRepository;
+
+    /**
+     * @var ProductAttributeOptionManagementInterface
+     */
+    private $attributeOptionManagement;
+
+    /**
+     * @var Emulation
+     */
+    private $emulation;
+
+    /**
      * @var array
      */
     private $allowedStringId = [

@@ -44,6 +44,86 @@ class UpdateTranslationEntity
     private $storeId = null;
 
     /**
+     * @var CategoryRepositoryInterface
+     */
+    private CategoryRepositoryInterface $categoryRepository;
+
+    /**
+     * @var ProductRepositoryInterface
+     */
+    private ProductRepositoryInterface $productRepository;
+
+    /**
+     * @var Emulation
+     */
+    private Emulation $emulation;
+
+    /**
+     * @var EmailTemplateResourceModel
+     */
+    private EmailTemplateResourceModel $emailTemplateResourceModel;
+
+    /**
+     * @var EmailTemplate
+     */
+    private EmailTemplate $emailTemplate;
+
+    /**
+     * @var PageRepositoryInterface
+     */
+    private PageRepositoryInterface $pageRepository;
+
+    /**
+     * @var BlockRepositoryInterface
+     */
+    private BlockRepositoryInterface $blockRepository;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private StoreManagerInterface $storeManager;
+
+    /**
+     * @var ResourceConnection
+     */
+    private ResourceConnection $resource;
+
+    /**
+     * @var GetPageByIdentifierInterface
+     */
+    private GetPageByIdentifierInterface $getPageByIdentifier;
+
+    /**
+     * @var GetBlockByIdentifierInterface
+     */
+    private GetBlockByIdentifierInterface $getBlockByIdentifier;
+
+    /**
+     * @var PageFactory
+     */
+    private PageFactory $pageFactory;
+
+    /**
+     * @var BlockFactory
+     */
+    private BlockFactory $blockFactory;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private SearchCriteriaBuilder $searchCriteriaBuilder;
+
+    /**
+     * @var FilterBuilder
+     */
+    private FilterBuilder $filterBuilder;
+
+    /**
+     * @var FilterGroupBuilder
+     */
+    private FilterGroupBuilder $filterGroupBuilder;
+
+    /**
      * @param CategoryRepositoryInterface $categoryRepository
      * @param ProductRepositoryInterface $productRepository
      * @param Emulation $emulation

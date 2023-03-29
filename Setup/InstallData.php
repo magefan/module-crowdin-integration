@@ -25,6 +25,16 @@ class InstallData implements InstallDataInterface
     private $integrationManager;
 
     /**
+     * @var WriterInterface
+     */
+    private $configWriter;
+
+    /**
+     * @var GetTranslationEntity
+     */
+    private $translationEntity;
+
+    /**
      * @param ConfigBasedIntegrationManager $integrationManager
      * @param WriterInterface $configWriter
      * @param GetTranslationEntity $translationEntity
