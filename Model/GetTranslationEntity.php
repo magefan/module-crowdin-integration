@@ -245,6 +245,8 @@ class GetTranslationEntity
             foreach ($attributes as $attribute) {
                 $data[$storeId][$attribute['code']] = $category->getData($attribute['code']);
             }
+
+            $data[$storeId]['store_id'] = $storeId;
         }
 
         return $data;
@@ -286,6 +288,8 @@ class GetTranslationEntity
             foreach ($attributes as $attribute) {
                 $data[$storeId][$attribute['code']] = $product->getData($attribute['code']);
             }
+
+            $data[$storeId]['store_id'] = $storeId;
         }
 
         return $data;
@@ -316,6 +320,8 @@ class GetTranslationEntity
             foreach ($attributes as $attribute) {
                 $data[$storeId][$attribute['code']] = $emailTemplate->getData($attribute['code']);
             }
+
+            $data[$storeId]['store_id'] = $storeId;
         }
 
         return $data;
@@ -371,6 +377,8 @@ class GetTranslationEntity
             foreach ($attributes as $attribute) {
                 $data[$storeId][$attribute['code']] = $cmsEntity->getData($attribute['code']);
             }
+
+            $data[$storeId]['store_id'] = $storeId;
         }
 
         return $data;
@@ -440,6 +448,8 @@ class GetTranslationEntity
 
                 $data[$storeId][$labelInCrowdinForOriginalText] = (string)$option->getLabel();
             }
+
+            $data[$storeId]['store_id'] = $storeId;
 
             $this->emulation->stopEnvironmentEmulation();
         }
