@@ -10,7 +10,7 @@
         <tab id="magefan" sortOrder="110" translate="label" class="magefan-tab">
             <label>Magefan Extensions</label>
         </tab>
-        <section id="mf_crowdin_sync_settings" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label">
+        <section id="mf_crowdin_sync_settings" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10026401600" translate="label">
             <label>Crowdin Integration</label>
             <tab>magefan</tab>
             <resource>Magefan_Crowdin::config_integration</resource>
@@ -37,7 +37,7 @@
             <group id="mapped" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Synchronize To Crowdin</label>
                 <attribute type="expanded">1</attribute>
-                <field id="fields" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="fields" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <frontend_model>Magefan\Crowdin\Block\Adminhtml\Form\Field\Mapped</frontend_model>
                     <backend_model>Magefan\Crowdin\Model\System\Config\Backend\Mapped</backend_model>
                     <comment>If some field won't be selected in mapping, it will be enabled by default. If you remove all mappings, all fields will be enable to sync to Crowdin</comment>
@@ -45,11 +45,11 @@
             </group>
             <group id="catalog_synchronization" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1">
                 <label>Catalog Synchronization</label>
-                <field id="synchronize_categories_and_products" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="synchronize_categories_and_products" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Synchronize Categories And Products</label>
                     <source_model>Magefan\Crowdin\Model\Config\Source\SynchronizationType</source_model>
                 </field>
-                <field id="specific_categories_and_products" translate="label comment" type="multiselect" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="specific_categories_and_products" translate="label comment" type="multiselect" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label><![CDATA[Specific Сategories and Products]]></label>
                     <source_model>Magefan\Crowdin\Model\Config\Source\CategoryList</source_model>
                     <frontend_model>Magefan\Crowdin\Block\Adminhtml\Form\Multiselect</frontend_model>

@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <mf_crowdin_sync_settings>
+            <mapped>
+                <fields>
+                    {
+                    "block\/content":"1",
+                    "block\/title":"1",
+                    "category\/assign_product_with_attributes":"1",
+                    "category\/description":"1",
+                    "category\/meta_description":"1",
+                    "category\/meta_keywords":"1",
+                    "category\/meta_title":"1",
+                    "category\/name":"1",
+                    "category\/url_key":"1",
+                    "email\/template_code":"1",
+                    "email\/template_subject":"1",
+                    "email\/template_text":"1",
+                    "page\/content":"1",
+                    "page\/content_heading":"1",
+                    "page\/meta_description":"1",
+                    "page\/meta_keywords":"1",
+                    "page\/meta_title":"1",
+                    "page\/title":"1",
+                    "product\/accessory_custom_engraving_text":"1",
+                    "product\/accessory_description_detailed_extra":"1",
+                    "product\/accessory_description_extra":"1",
+                    "product\/accessory_description_pagebuilder_extra":"1",
+                    "product\/description":"1",
+                    "product\/description_extra":"1",
+                    "product\/meta_description":"1",
+                    "product\/meta_keyword":"1",
+                    "product\/meta_title":"1",
+                    "product\/mfdc_reviews_count":"1",
+                    "product\/name":"1",
+                    "product\/short_description":"1",
+                    "product\/url_key":"1",
+                    "product\/video_file":"1"
+                    }
+                </fields>
+            </mapped>
+            <catalog_synchronization>
+                <synchronize_categories_and_products>0</synchronize_categories_and_products>
+                <specific_categories_and_products/>
+            </catalog_synchronization>
+        </mf_crowdin_sync_settings>
+    </default>
+</config>
