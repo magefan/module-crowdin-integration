@@ -5,7 +5,7 @@
 
 This extension allows you to integrate Magento 2 Shop with Crowdin to easily manage and perform your store localization.
 
-<a href="https://magefan.com/magento-2-crowdin-integration"><img width="190" height="70" src="https://magefan.com/media/wysiwyg/download-now_1.png"></a>
+<a href="https://magefan.com/magento-2-crowdin-integration"><img width="190" height="70" src="https://cm.magefan.com/wysiwyg/products/download-magefan-extensions.png"></a>
 
 ## Requirements
   * Magento Community 2.2.0-2.4.x (CE, EE, ECE, B2B)
