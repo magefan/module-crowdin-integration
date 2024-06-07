@@ -282,7 +282,7 @@ class UpdateTranslationEntity
      */
     private function updateCmsPageData(string $identifier, array $data)
     {
-        $page = $this->getCmsEntityByIdentifier($identifier, $this->pageRepository);
+        $page = $this->getCmsEntityByIdentifier($identifier, $this->pageRepository, $this->pageFactory);
 
         // if page saved on all store views
         if (in_array(0, $page->getStoreId())) {
@@ -332,7 +332,7 @@ class UpdateTranslationEntity
      */
     private function updateCmsBlockData(string $identifier, array $data)
     {
-        $block = $this->getCmsEntityByIdentifier($identifier, $this->blockRepository);
+        $block = $this->getCmsEntityByIdentifier($identifier, $this->blockRepository, $this->blockFactory);
 
         // if block saved on all store views
         if (in_array(0, $block->getStoreId())) {
@@ -380,7 +380,7 @@ class UpdateTranslationEntity
      * @param $repository
      * @return false|mixed
      */
-    private function getCmsEntityByIdentifier($identifier, $repository)
+    private function getCmsEntityByIdentifier($identifier, $repository, $factory)
     {
         $storeFilter = $this->filterBuilder
             ->setField('store_id')
@@ -414,9 +414,20 @@ class UpdateTranslationEntity
         }
 
         if (!$cmsEntity) {
-            throw new \Magento\Framework\Exception\NoSuchEntityException(
-                __('Entity with such id %1 does not exist', $identifier)
-            );
+            $cmsEntity = $factory->create(
+                    ['data' =>
+                        [
+                            'title' => $identifier,
+                            'identifier' => $identifier
+                        ]
+                    ]
+            )
+            ->setId(null)
+            ->setCreationTime(null)
+            ->setUpdateTime(null)
+            ->setStoreId([$this->storeId]);
+
+            return $repository->save($cmsEntity);
         }
 
         return reset($cmsEntity);
