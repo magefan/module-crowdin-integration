@@ -39,8 +39,8 @@ class Mapped extends \Magento\Framework\App\Config\Value
         ScopeConfigInterface $config,
         TypeListInterface $cacheTypeList,
         ModelMapped $translatableIntegrationMapped,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->translatableIntegrationMapped = $translatableIntegrationMapped;
