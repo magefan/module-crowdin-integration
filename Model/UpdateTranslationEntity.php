@@ -124,6 +124,11 @@ class UpdateTranslationEntity
     private $filterGroupBuilder;
 
     /**
+     * @var GetTranslationEntity
+     */
+    private $getTranslationEntity;
+
+    /**
      * @param CategoryRepositoryInterface $categoryRepository
      * @param ProductRepositoryInterface $productRepository
      * @param Emulation $emulation
@@ -140,6 +145,7 @@ class UpdateTranslationEntity
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param FilterBuilder $filterBuilder
      * @param FilterGroupBuilder $filterGroupBuilder
+     * @param GetTranslationEntity $getTranslationEntity
      */
     public function __construct(
         CategoryRepositoryInterface $categoryRepository,
@@ -157,7 +163,8 @@ class UpdateTranslationEntity
         BlockFactory $blockFactory,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         FilterBuilder $filterBuilder,
-        FilterGroupBuilder $filterGroupBuilder
+        FilterGroupBuilder $filterGroupBuilder,
+        GetTranslationEntity $getTranslationEntity
     ) {
         $this->categoryRepository = $categoryRepository;
         $this->productRepository = $productRepository;
@@ -175,6 +182,7 @@ class UpdateTranslationEntity
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filterBuilder = $filterBuilder;
         $this->filterGroupBuilder = $filterGroupBuilder;
+        $this->getTranslationEntity = $getTranslationEntity;
     }
 
 
@@ -207,6 +215,10 @@ class UpdateTranslationEntity
 
         $this->storeId = (int)$data['store_id'];
         unset($data['store_id']);
+
+        if ($type !== GetTranslationEntitiesList::PRODUCT_ATTRIBUTE_ENTITY) {
+            $data = array_intersect_key($data, array_flip($this->getTranslationEntity->getAllowedAttributeCodes($type)));
+        }
 
         $this->emulation->startEnvironmentEmulation($this->storeId, 'adminhtml');
 
@@ -449,6 +461,30 @@ class UpdateTranslationEntity
     }
 
     /**
+     * Options by their label, then by the key the label gets in Crowdin; a Crowdin key that several options share is found only by an exact label
+     *
+     * @param array $options
+     * @return array
+     */
+    private function getOptionsByLabelInCrowdin(array $options): array
+    {
+        $result = [];
+        $shared = [];
+
+        foreach ($options as $label => $option) {
+            $labelInCrowdin = $this->getTranslationEntity->getLabelInCrowdin((string)$label);
+
+            if (isset($result[$labelInCrowdin])) {
+                $shared[$labelInCrowdin] = true;
+            }
+
+            $result[$labelInCrowdin] = $option;
+        }
+
+        return $options + array_diff_key($result, $shared);
+    }
+
+    /**
      * @param $attributeId
      * @param array $data
      */
@@ -488,9 +524,9 @@ class UpdateTranslationEntity
                 []
             )->where('option.attribute_id = ?', $attributeId);
 
-        $attributeOriginalValues = $connection->fetchAssoc(
+        $attributeOriginalValues = $this->getOptionsByLabelInCrowdin($connection->fetchAssoc(
             $selectAttributesData->where('option_value.store_id = ?', Store::DEFAULT_STORE_ID)
-        );
+        ));
 
         foreach ($data as $originalAttributeVal => $translatedAttributeVal) {
             if (isset($attributeOriginalValues[$originalAttributeVal])) {
