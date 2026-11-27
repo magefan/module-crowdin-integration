@@ -188,8 +188,7 @@ class UpdateTranslationEntity
 
     /**
      * @param $id
-     * @param $data
-     * @return array
+     * @return array|void
      */
     public function execute($id, $data)
     {
@@ -210,70 +209,49 @@ class UpdateTranslationEntity
             return ['message' => 'Entity id (' . $id . ') for this entity should be numeric!', 'success' => false];
         }
 
-        if (!is_array($data) || !isset($data['store_id'])) {
+        if (!isset($data['store_id'])) {
             return ['message' => __('Missed store_id!'), 'success' => false];
         }
 
         $this->storeId = (int)$data['store_id'];
         unset($data['store_id']);
 
-        $data = $this->getTranslatableData($type, $data);
+        if ($type !== GetTranslationEntitiesList::PRODUCT_ATTRIBUTE_ENTITY) {
+            $data = array_intersect_key($data, array_flip($this->getTranslationEntity->getAllowedAttributeCodes($type)));
+        }
+
+        $data = array_filter($data, 'is_scalar');
 
         if (!$data) {
-            // do not save (and do not duplicate/create CMS entities) when there is nothing to translate
             return ['message' => __('Nothing to update.'), 'success' => true];
         }
 
         $this->emulation->startEnvironmentEmulation($this->storeId, 'adminhtml');
 
-        try {
-            switch ($type) {
-                case GetTranslationEntitiesList::CATEGORY_ENTITY:
-                    $this->updateCategoryData((int)$id, $data);
-                    break;
-                case GetTranslationEntitiesList::PRODUCT_ENTITY:
-                    $this->updateProductData((int)$id, $data);
-                    break;
-                case GetTranslationEntitiesList::EMAIL_ENTITY:
-                    $this->updateEmailTemplateData((int)$id, $data);
-                    break;
-                case GetTranslationEntitiesList::CMS_PAGE_ENTITY:
-                    $this->updateCmsPageData($id, $data);
-                    break;
-                case GetTranslationEntitiesList::CMS_BLOCK_ENTITY:
-                    $this->updateCmsBlockData($id, $data);
-                    break;
-                case GetTranslationEntitiesList::PRODUCT_ATTRIBUTE_ENTITY:
-                    $this->updateProductAttributeData((int)$id, $data);
-                    break;
-            }
-        } finally {
-            $this->emulation->stopEnvironmentEmulation();
+        switch ($type) {
+            case GetTranslationEntitiesList::CATEGORY_ENTITY:
+                $this->updateCategoryData((int)$id, $data);
+                break;
+            case GetTranslationEntitiesList::PRODUCT_ENTITY:
+                $this->updateProductData((int)$id, $data);
+                break;
+            case GetTranslationEntitiesList::EMAIL_ENTITY:
+                $this->updateEmailTemplateData((int)$id, $data);
+                break;
+            case GetTranslationEntitiesList::CMS_PAGE_ENTITY:
+                $response = $this->updateCmsPageData($id, $data);
+                break;
+            case GetTranslationEntitiesList::CMS_BLOCK_ENTITY:
+                $response = $this->updateCmsBlockData($id, $data);
+                break;
+            case GetTranslationEntitiesList::PRODUCT_ATTRIBUTE_ENTITY:
+                $response = $this->updateProductAttributeData((int)$id, $data);
+                break;
         }
+
+        $this->emulation->stopEnvironmentEmulation();
 
         return $response;
-    }
-
-    /**
-     * Only fields that are sent to Crowdin, with scalar values.
-     * Product attribute data is keyed by option labels, options are matched in updateProductAttributeData()
-     *
-     * @param string $type
-     * @param array $data
-     * @return array
-     */
-    private function getTranslatableData(string $type, array $data): array
-    {
-        if ($type !== GetTranslationEntitiesList::PRODUCT_ATTRIBUTE_ENTITY) {
-            $allowedCodes = array_column($this->getTranslationEntity->getAllowedAttributes($type), 'code');
-            $data = array_intersect_key($data, array_flip($allowedCodes));
-        }
-
-        $allowNull = $type !== GetTranslationEntitiesList::PRODUCT_ATTRIBUTE_ENTITY;
-
-        return array_filter($data, function ($value) use ($allowNull) {
-            return is_scalar($value) || ($allowNull && $value === null);
-        });
     }
 
     /**
@@ -352,28 +330,20 @@ class UpdateTranslationEntity
 
         unset($storeIds[$storeId]);
 
-        $this->pageRepository->save($this->setCmsPageStores($page, $storeIds));
+        // stores is saved to cms_page_store, store_id is used for url rewrites
+        $page->setStoreId($storeIds)->setStores($storeIds);
+        $this->pageRepository->save($page);
 
         $newPage = $this->pageFactory
             ->create(['data' => $page->getData()])
             ->setId(null)
             //->setIsActive(0)
             ->setCreationTime(null)
-            ->setUpdateTime(null);
+            ->setUpdateTime(null)
+            ->setStoreId([$storeId])
+            ->setStores([$storeId]);
 
-        return $this->pageRepository->save($this->setCmsPageStores($newPage, [$storeId]));
-    }
-
-    /**
-     * Page store assignment: cms_page_store is saved from "stores", URL rewrites are generated from "store_id"
-     *
-     * @param $page
-     * @param array $storeIds
-     * @return mixed
-     */
-    private function setCmsPageStores($page, array $storeIds)
-    {
-        return $page->setStoreId($storeIds)->setStores($storeIds);
+       return $this->pageRepository->save($newPage);
     }
 
     /**

@@ -232,7 +232,7 @@ class GetTranslationEntity
     {
         $data = [];
 
-        $attributes = $this->getAllowedAttributes(GetTranslationEntitiesList::CATEGORY_ENTITY);
+        $attributes = $this->removeNotAllowedFields($this->getCatalogAttributes($this->categoryAttributeRepository), 'category');
 
         foreach ($this->storeManager->getStores() as $store) {
             if (!$store->getIsActive()) {
@@ -268,27 +268,32 @@ class GetTranslationEntity
     }
 
     /**
-     * Attributes that are sent to Crowdin and may be updated from it, without fields disabled in the mapping
-     *
-     * @param string $entityType entity type from GetTranslationEntitiesList, e.g. catalog-product
-     * @return array [['label' => ..., 'code' => ..., 'type' => ...], ...]
+     * @param string $entityType
+     * @return array
      */
-    public function getAllowedAttributes(string $entityType): array
+    public function getAllowedAttributeCodes(string $entityType): array
     {
         switch ($entityType) {
             case GetTranslationEntitiesList::CATEGORY_ENTITY:
-                return $this->removeNotAllowedFields($this->getCatalogAttributes($this->categoryAttributeRepository), 'category');
+                $attributes = $this->removeNotAllowedFields($this->getCatalogAttributes($this->categoryAttributeRepository), 'category');
+                break;
             case GetTranslationEntitiesList::PRODUCT_ENTITY:
-                return $this->removeNotAllowedFields($this->getCatalogAttributes($this->productAttributeRepository), 'product');
+                $attributes = $this->removeNotAllowedFields($this->getCatalogAttributes($this->productAttributeRepository), 'product');
+                break;
             case GetTranslationEntitiesList::EMAIL_ENTITY:
-                return $this->removeNotAllowedFields($this->getEmailAttributes(), 'email');
+                $attributes = $this->removeNotAllowedFields($this->getEmailAttributes(), 'email');
+                break;
             case GetTranslationEntitiesList::CMS_PAGE_ENTITY:
-                return $this->removeNotAllowedFields($this->getCmsAttributesByType('page'), 'page');
+                $attributes = $this->removeNotAllowedFields($this->getCmsAttributesByType('page'), 'page');
+                break;
             case GetTranslationEntitiesList::CMS_BLOCK_ENTITY:
-                return $this->removeNotAllowedFields($this->getCmsAttributesByType('block'), 'block');
+                $attributes = $this->removeNotAllowedFields($this->getCmsAttributesByType('block'), 'block');
+                break;
+            default:
+                return [];
         }
 
-        return [];
+        return array_column($attributes, 'code');
     }
 
     /**
@@ -299,7 +304,7 @@ class GetTranslationEntity
     {
         $data = [];
 
-        $attributes = $this->getAllowedAttributes(GetTranslationEntitiesList::PRODUCT_ENTITY);
+        $attributes = $this->removeNotAllowedFields($this->getCatalogAttributes($this->productAttributeRepository), 'product');
 
         foreach ($this->storeManager->getStores() as $store) {
             if (!$store->getIsActive()) {
@@ -326,7 +331,7 @@ class GetTranslationEntity
     private function getEmailTemplateData(int $id): array
     {
         $data = [];
-        $attributes = $this->getAllowedAttributes(GetTranslationEntitiesList::EMAIL_ENTITY);
+        $attributes = $this->removeNotAllowedFields($this->getEmailAttributes(), 'email');
 
         $emailTemplate = $this->emailTemplate->load($id);
 
@@ -357,7 +362,7 @@ class GetTranslationEntity
      */
     private function getCmsPageData(string $identifier): array
     {
-        return $this->getCmsEntityData($this->pageRepository, GetTranslationEntitiesList::CMS_PAGE_ENTITY, $identifier);
+        return $this->getCmsEntityData($this->pageRepository, 'page', $identifier);
     }
 
     /**
@@ -366,7 +371,7 @@ class GetTranslationEntity
      */
     private function getCmsBlockData(string $identifier): array
     {
-        return $this->getCmsEntityData($this->blockRepository, GetTranslationEntitiesList::CMS_BLOCK_ENTITY, $identifier);
+        return $this->getCmsEntityData($this->blockRepository, 'block', $identifier);
     }
 
     /**
@@ -380,7 +385,7 @@ class GetTranslationEntity
 
         $stores = [0];
         $data = [];
-        $attributes = $this->getAllowedAttributes($entityType);
+        $attributes = $this->removeNotAllowedFields($this->getCmsAttributesByType($entityType), $entityType);
 
         foreach ($this->storeManager->getStores() as $store) {
             //if ($store->getIsActive())
