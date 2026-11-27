@@ -268,6 +268,35 @@ class GetTranslationEntity
     }
 
     /**
+     * @param string $entityType
+     * @return array
+     */
+    public function getAllowedAttributeCodes(string $entityType): array
+    {
+        switch ($entityType) {
+            case GetTranslationEntitiesList::CATEGORY_ENTITY:
+                $attributes = $this->removeNotAllowedFields($this->getCatalogAttributes($this->categoryAttributeRepository), 'category');
+                break;
+            case GetTranslationEntitiesList::PRODUCT_ENTITY:
+                $attributes = $this->removeNotAllowedFields($this->getCatalogAttributes($this->productAttributeRepository), 'product');
+                break;
+            case GetTranslationEntitiesList::EMAIL_ENTITY:
+                $attributes = $this->removeNotAllowedFields($this->getEmailAttributes(), 'email');
+                break;
+            case GetTranslationEntitiesList::CMS_PAGE_ENTITY:
+                $attributes = $this->removeNotAllowedFields($this->getCmsAttributesByType('page'), 'page');
+                break;
+            case GetTranslationEntitiesList::CMS_BLOCK_ENTITY:
+                $attributes = $this->removeNotAllowedFields($this->getCmsAttributesByType('block'), 'block');
+                break;
+            default:
+                return [];
+        }
+
+        return array_column($attributes, 'code');
+    }
+
+    /**
      * @param int $id
      * @return array
      */
@@ -441,9 +470,7 @@ class GetTranslationEntity
                     continue;
                 }
 
-                $labelInCrowdinForOriginalText = $baseOptionLabel[$option->getValue()];
-                $labelInCrowdinForOriginalText = str_replace('&', 'and', $labelInCrowdinForOriginalText);
-                $labelInCrowdinForOriginalText = preg_replace("/[^A-Za-z0-9]/", '_', $labelInCrowdinForOriginalText);
+                $labelInCrowdinForOriginalText = $this->getLabelInCrowdin($baseOptionLabel[$option->getValue()]);
 
 
                 $data[$storeId][$labelInCrowdinForOriginalText] = (string)$option->getLabel();
@@ -455,6 +482,15 @@ class GetTranslationEntity
         }
 
         return $data;
+    }
+
+    /**
+     * @param string $label
+     * @return string
+     */
+    public function getLabelInCrowdin(string $label): string
+    {
+        return preg_replace("/[^A-Za-z0-9]/", '_', str_replace('&', 'and', $label));
     }
 
     /**
