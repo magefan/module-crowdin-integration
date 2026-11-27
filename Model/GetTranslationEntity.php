@@ -232,7 +232,7 @@ class GetTranslationEntity
     {
         $data = [];
 
-        $attributes = $this->removeNotAllowedFields($this->getCatalogAttributes($this->categoryAttributeRepository), 'category');
+        $attributes = $this->getAllowedAttributes(GetTranslationEntitiesList::CATEGORY_ENTITY);
 
         foreach ($this->storeManager->getStores() as $store) {
             if (!$store->getIsActive()) {
@@ -268,6 +268,30 @@ class GetTranslationEntity
     }
 
     /**
+     * Attributes that are sent to Crowdin and may be updated from it, without fields disabled in the mapping
+     *
+     * @param string $entityType entity type from GetTranslationEntitiesList, e.g. catalog-product
+     * @return array [['label' => ..., 'code' => ..., 'type' => ...], ...]
+     */
+    public function getAllowedAttributes(string $entityType): array
+    {
+        switch ($entityType) {
+            case GetTranslationEntitiesList::CATEGORY_ENTITY:
+                return $this->removeNotAllowedFields($this->getCatalogAttributes($this->categoryAttributeRepository), 'category');
+            case GetTranslationEntitiesList::PRODUCT_ENTITY:
+                return $this->removeNotAllowedFields($this->getCatalogAttributes($this->productAttributeRepository), 'product');
+            case GetTranslationEntitiesList::EMAIL_ENTITY:
+                return $this->removeNotAllowedFields($this->getEmailAttributes(), 'email');
+            case GetTranslationEntitiesList::CMS_PAGE_ENTITY:
+                return $this->removeNotAllowedFields($this->getCmsAttributesByType('page'), 'page');
+            case GetTranslationEntitiesList::CMS_BLOCK_ENTITY:
+                return $this->removeNotAllowedFields($this->getCmsAttributesByType('block'), 'block');
+        }
+
+        return [];
+    }
+
+    /**
      * @param int $id
      * @return array
      */
@@ -275,7 +299,7 @@ class GetTranslationEntity
     {
         $data = [];
 
-        $attributes = $this->removeNotAllowedFields($this->getCatalogAttributes($this->productAttributeRepository), 'product');
+        $attributes = $this->getAllowedAttributes(GetTranslationEntitiesList::PRODUCT_ENTITY);
 
         foreach ($this->storeManager->getStores() as $store) {
             if (!$store->getIsActive()) {
@@ -302,7 +326,7 @@ class GetTranslationEntity
     private function getEmailTemplateData(int $id): array
     {
         $data = [];
-        $attributes = $this->removeNotAllowedFields($this->getEmailAttributes(), 'email');
+        $attributes = $this->getAllowedAttributes(GetTranslationEntitiesList::EMAIL_ENTITY);
 
         $emailTemplate = $this->emailTemplate->load($id);
 
@@ -333,7 +357,7 @@ class GetTranslationEntity
      */
     private function getCmsPageData(string $identifier): array
     {
-        return $this->getCmsEntityData($this->pageRepository, 'page', $identifier);
+        return $this->getCmsEntityData($this->pageRepository, GetTranslationEntitiesList::CMS_PAGE_ENTITY, $identifier);
     }
 
     /**
@@ -342,7 +366,7 @@ class GetTranslationEntity
      */
     private function getCmsBlockData(string $identifier): array
     {
-        return $this->getCmsEntityData($this->blockRepository, 'block', $identifier);
+        return $this->getCmsEntityData($this->blockRepository, GetTranslationEntitiesList::CMS_BLOCK_ENTITY, $identifier);
     }
 
     /**
@@ -356,7 +380,7 @@ class GetTranslationEntity
 
         $stores = [0];
         $data = [];
-        $attributes = $this->removeNotAllowedFields($this->getCmsAttributesByType($entityType), $entityType);
+        $attributes = $this->getAllowedAttributes($entityType);
 
         foreach ($this->storeManager->getStores() as $store) {
             //if ($store->getIsActive())
@@ -441,9 +465,7 @@ class GetTranslationEntity
                     continue;
                 }
 
-                $labelInCrowdinForOriginalText = $baseOptionLabel[$option->getValue()];
-                $labelInCrowdinForOriginalText = str_replace('&', 'and', $labelInCrowdinForOriginalText);
-                $labelInCrowdinForOriginalText = preg_replace("/[^A-Za-z0-9]/", '_', $labelInCrowdinForOriginalText);
+                $labelInCrowdinForOriginalText = $this->getLabelInCrowdin($baseOptionLabel[$option->getValue()]);
 
 
                 $data[$storeId][$labelInCrowdinForOriginalText] = (string)$option->getLabel();
@@ -455,6 +477,15 @@ class GetTranslationEntity
         }
 
         return $data;
+    }
+
+    /**
+     * @param string $label
+     * @return string
+     */
+    public function getLabelInCrowdin(string $label): string
+    {
+        return preg_replace("/[^A-Za-z0-9]/", '_', str_replace('&', 'and', $label));
     }
 
     /**
